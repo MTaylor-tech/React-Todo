@@ -34,7 +34,7 @@ class App extends React.Component {
       }
     ];
 
-    if (storedList !== undefined) {
+    if (storedList !== undefined && storedList !== null) {
       const splitList = storedList.split(';');
       newList = splitList.map(entry=>{
         const item = entry.split(',');
