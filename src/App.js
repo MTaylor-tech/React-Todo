@@ -21,7 +21,18 @@ class App extends React.Component {
   constructor () {
     super();
     const storedList = localStorage.getItem("mySpecialTodoList");
-    let newList = [];
+    let newList = [
+      {
+        task: 'Organize Garage',
+        id: 1528817077286,
+        completed: false
+      },
+      {
+        task: 'Bake Cookies',
+        id: 1528817084358,
+        completed: false
+      }
+    ];
 
     if (storedList !== undefined) {
       const splitList = storedList.split(';');
