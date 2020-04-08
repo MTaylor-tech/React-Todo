@@ -20,10 +20,36 @@ class App extends React.Component {
   // this component is going to take care of state, and any change handlers you need to work with your state
   constructor () {
     super();
+    const storedList = localStorage.getItem("mySpecialTodoList");
+    let newList = [];
+
+    if (storedList !== undefined) {
+      const splitList = storedList.split(';');
+      newList = splitList.map(entry=>{
+        const item = entry.split(',');
+        let completed = false;
+        if (item[2]==='true') {
+          completed = true;
+        }
+        return {id: item[0], task: item[1], completed: completed};
+      });
+    }
+
     this.state = {
-      listOfTodos: [],
-      todosShowing: []
+      listOfTodos: newList,
+      todosShowing: newList
     };
+  }
+
+  saveList = (list) => {
+    const newList = list.map(entry=>{
+      let completedString = 'false';
+      if (entry.completed) {
+        completedString = 'true';
+      }
+      return `${entry.id},${entry.task},${completedString}`;
+    })
+    localStorage.setItem("mySpecialTodoList", newList.join(';'));
   }
 
   addTodo = (task) => {
@@ -32,10 +58,12 @@ class App extends React.Component {
       id: Date.now(),
       completed: false
     };
+    const newList = [...this.state.listOfTodos, newTodo];
     this.setState({
-      listOfTodos: [...this.state.listOfTodos, newTodo],
-      todosShowing: [...this.state.listOfTodos, newTodo]
+      listOfTodos: newList,
+      todosShowing: newList
     });
+    this.saveList(newList);
   }
 
   setCompleted = (taskId, value) => {
@@ -51,11 +79,13 @@ class App extends React.Component {
             }
       });
       this.setState({listOfTodos: newList, todosShowing: newList});
+      this.saveList(newList);
   }
 
   clearCompleted = () => {
     const newList = this.state.listOfTodos.filter(t=>t.completed===false);
     this.setState({listOfTodos: newList, todosShowing: newList});
+    this.saveList(newList);
   }
 
   searchFunction = (searchFilter) => {
