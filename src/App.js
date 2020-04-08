@@ -21,7 +21,8 @@ class App extends React.Component {
   constructor () {
     super();
     this.state = {
-      listOfTodos: []
+      listOfTodos: [],
+      todosShowing: []
     };
   }
 
@@ -31,7 +32,10 @@ class App extends React.Component {
       id: Date.now(),
       completed: false
     };
-    this.setState({listOfTodos: [...this.state.listOfTodos, newTodo]});
+    this.setState({
+      listOfTodos: [...this.state.listOfTodos, newTodo],
+      todosShowing: [...this.state.listOfTodos, newTodo]
+    });
   }
 
   setCompleted = (taskId, value) => {
@@ -46,19 +50,25 @@ class App extends React.Component {
               return task;
             }
       });
-      this.setState({listOfTodos: newList});
+      this.setState({listOfTodos: newList, todosShowing: newList});
   }
 
   clearCompleted = () => {
-    this.setState({listOfTodos: this.state.listOfTodos.filter(t=>t.completed===false)});
+    const newList = this.state.listOfTodos.filter(t=>t.completed===false);
+    this.setState({listOfTodos: newList, todosShowing: newList});
+  }
+
+  searchFunction = (searchFilter) => {
+    const filteredList = this.state.listOfTodos.filter(t=>t.task.toLowerCase().includes(searchFilter.toLowerCase()));
+    this.setState({todosShowing: filteredList});
   }
 
   render() {
     return (
       <MainDiv>
-        <h1>Quick ToDo List</h1>
-        <TodoForm addFunction={this.addTodo} clearCompleted={this.clearCompleted} />
-        <TodoList list={this.state.listOfTodos} completedFunction={this.setCompleted} />
+        <h1>Quick To-Do List</h1>
+        <TodoForm addFunction={this.addTodo} clearCompleted={this.clearCompleted} searchFunction={this.searchFunction} />
+        <TodoList list={this.state.todosShowing} completedFunction={this.setCompleted} />
       </MainDiv>
     );
   }
