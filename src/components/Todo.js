@@ -35,7 +35,7 @@ class Todo extends React.Component {
     return (
       <TodoDiv>
         {this.state.completed?<input name={this.state.id} type="checkbox" defaultChecked onChange={this.changeHandler} />:<input name={this.state.id} type="checkbox" onChange={this.changeHandler} />}
-        {this.state.completed?<label htmlFor={this.state.id} className="strikeThru">{this.state.taskName}</label>:<label htmlFor={this.state.id}>{this.state.taskName}</label>}
+        {this.state.completed?<label htmlFor={this.state.id} className="strikeThru" onClick={this.changeHandler} >{this.state.taskName}</label>:<label htmlFor={this.state.id} onClick={this.changeHandler} >{this.state.taskName}</label>}
       </TodoDiv>
     );
   }
